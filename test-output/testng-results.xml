@@ -2,24 +2,24 @@
 <testng-results skipped="0" failed="0" ignored="0" total="1" passed="1">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="18134" started-at="2018-06-18T10:16:35Z" finished-at="2018-06-18T10:16:54Z">
+  <suite name="Default suite" duration-ms="21370" started-at="2018-06-18T14:01:13Z" finished-at="2018-06-18T14:01:34Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="18134" started-at="2018-06-18T10:16:35Z" finished-at="2018-06-18T10:16:54Z">
-      <class name="exampleAppTest">
-        <test-method status="PASS" signature="beforeMethod()[pri:0, instance:exampleAppTest@1990a65e]" name="beforeMethod" is-config="true" duration-ms="4960" started-at="2018-06-18T10:16:35Z" finished-at="2018-06-18T10:16:40Z">
+    <test name="Default test" duration-ms="21370" started-at="2018-06-18T14:01:13Z" finished-at="2018-06-18T14:01:34Z">
+      <class name="exampleWebAppTest">
+        <test-method status="PASS" signature="beforeMethod()[pri:0, instance:exampleWebAppTest@17d0685f]" name="beforeMethod" is-config="true" duration-ms="6108" started-at="2018-06-18T14:01:13Z" finished-at="2018-06-18T14:01:19Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- beforeMethod -->
-        <test-method status="PASS" signature="exampleAppTesting()[pri:0, instance:exampleAppTest@1990a65e]" name="exampleAppTesting" duration-ms="11232" started-at="2018-06-18T10:16:40Z" finished-at="2018-06-18T10:16:52Z">
+        <test-method status="PASS" signature="exampleWebAppTesting()[pri:0, instance:exampleWebAppTest@17d0685f]" name="exampleWebAppTesting" duration-ms="14146" started-at="2018-06-18T14:01:19Z" finished-at="2018-06-18T14:01:33Z">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- exampleAppTesting -->
-        <test-method status="PASS" signature="afterMethod()[pri:0, instance:exampleAppTest@1990a65e]" name="afterMethod" is-config="true" duration-ms="1913" started-at="2018-06-18T10:16:52Z" finished-at="2018-06-18T10:16:54Z">
+        </test-method> <!-- exampleWebAppTesting -->
+        <test-method status="PASS" signature="afterMethod()[pri:0, instance:exampleWebAppTest@17d0685f]" name="afterMethod" is-config="true" duration-ms="1098" started-at="2018-06-18T14:01:33Z" finished-at="2018-06-18T14:01:34Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- afterMethod -->
-      </class> <!-- exampleAppTest -->
+      </class> <!-- exampleWebAppTest -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>

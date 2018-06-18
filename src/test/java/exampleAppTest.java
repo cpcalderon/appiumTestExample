@@ -26,14 +26,18 @@ public class exampleAppTest {
 	public void beforeMethod() throws MalformedURLException{
 
 		DesiredCapabilities capabilities = new DesiredCapabilities();
-		capabilities.setCapability(CapabilityType.BROWSER_NAME, "");
 
+		// Device name (can be random, but required)
 		capabilities.setCapability("deviceName", "testDevice");
-		capabilities.setCapability("platformName", "android");		
+		// Platform, Android or iOS
+		capabilities.setCapability("platformName", "android");
+		// APK location
 		capabilities.setCapability("app", USER_DIR+"/src/main/resources/app-debug.apk");
+		// Application package and activity to run
 		capabilities.setCapability("appPackage", "emergya.es.exampleapp");
 		capabilities.setCapability("appActivity", ".MainActivity");
 		capabilities.setCapability("noSign", true);
+		// Keep software keyboard closed to prevent intercepting taps on the screen
 		capabilities.setCapability("unicodeKeyboard", true);
 		capabilities.setCapability("resetKeyboard", true);
 
@@ -71,7 +75,7 @@ public class exampleAppTest {
 		assertTrue("Radio Button 2 is not pressed", clickRadioButton2.getAttribute("checked").equals("true"));
 
 	}
-
+	
 	private void waitSeconds(int i) throws InterruptedException {
 		Thread.sleep(i*1000);
 	}
