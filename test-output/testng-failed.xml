@@ -3,13 +3,13 @@
 <suite guice-stage="DEVELOPMENT" name="Failed suite [Default suite]">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="exampleWebAppTest">
+      <class name="appiumTest.exampleAppTest">
         <methods>
-          <include name="exampleWebAppTesting"/>
           <include name="afterMethod"/>
+          <include name="exampleAppTesting"/>
           <include name="beforeMethod"/>
         </methods>
-      </class> <!-- exampleWebAppTest -->
+      </class> <!-- appiumTest.exampleAppTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

@@ -1,14 +1,12 @@
-import static org.junit.Assert.assertEquals;
+package appiumTest;
 import static org.junit.Assert.assertTrue;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.xpath.axes.WalkingIteratorSorted;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -16,14 +14,13 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import io.appium.java_client.MobileElement;
-import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.MobileCapabilityType;
 
 public class exampleWebAppTest {
 	AndroidDriver<WebElement> driver;
 	String USER_DIR = System.getProperty("user.dir");
+	String TEXT_TO_SEARCH = "Appium webapp test";
 
 	@BeforeClass
 	public void beforeMethod() throws MalformedURLException{
@@ -32,8 +29,10 @@ public class exampleWebAppTest {
 
 		// Device name (can be random, but required)
 		capabilities.setCapability("deviceName", "testDevice");
+
 		// Browser to run
 		capabilities.setCapability(MobileCapabilityType.BROWSER_NAME, "chrome");
+
 		// Keep software keyboard closed to prevent intercepting taps on the screen
 		capabilities.setCapability("unicodeKeyboard", true);
 		capabilities.setCapability("resetKeyboard", true);
@@ -45,19 +44,25 @@ public class exampleWebAppTest {
 	public void afterMethod() {
 		driver.quit();
 	}
-	
+
 	@Test
 	public void exampleWebAppTesting() throws InterruptedException{
+		// Navigate to https://google.es
 		driver.get("https://google.es");
+
+		// Wait until the search box is present and find it
+		new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.name("q")));
 		WebElement textBox = driver.findElementByName("q");
-		textBox.sendKeys("Appium webapp test");
+
+		// Send the desired text and press enter
+		textBox.sendKeys(TEXT_TO_SEARCH);
 		textBox.sendKeys(Keys.ENTER);
-		waitSeconds(1);
+
+		// Wait for the new page to load by waiting for the search box, finding it again
+		new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.name("q")));
 		textBox = driver.findElementByName("q");
-		assertTrue("Text is correct", textBox.getAttribute("value").equals("Appium webapp test"));
-	}
-	
-	private void waitSeconds(int i) throws InterruptedException {
-		Thread.sleep(i*1000);
+
+		// Check actual text is the same as the one searched.
+		assertTrue("Text is correct", textBox.getAttribute("value").equals(TEXT_TO_SEARCH));
 	}
 }

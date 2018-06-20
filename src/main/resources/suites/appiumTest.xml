@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<suite name="Appium Test" enabled="true" configfailurepolicy="continue">
+
+	<test name="Example App Test" order-by-instances="true">
+		<classes>
+			<class name="appiumTest.exampleAppTest">
+				<methods>
+					<include name="exampleAppTesting" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+
+	<test name="Example Webapp Test" order-by-instances="true">
+		<classes>
+			<class name="appiumTest.exampleWebAppTest">
+				<methods>
+					<include name="exampleWebAppTesting" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+
+	<test name="Example WebView Test" order-by-instances="true">
+		<classes>
+			<class name="appiumTest.exampleWebviewTest">
+				<methods>
+					<include name="loginSuccessfulTest" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+</suite>

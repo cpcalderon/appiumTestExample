@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite configfailurepolicy="continue" name="Failed suite [Appium Test]">
+  <test thread-count="5" name="Example Webapp Test(failed)">
+    <classes>
+      <class name="appiumTest.exampleWebAppTest">
+        <methods>
+          <include name="exampleWebAppTesting"/>
+          <include name="afterMethod"/>
+          <include name="beforeMethod"/>
+        </methods>
+      </class> <!-- appiumTest.exampleWebAppTest -->
+    </classes>
+  </test> <!-- Example Webapp Test(failed) -->
+</suite> <!-- Failed suite [Appium Test] -->
