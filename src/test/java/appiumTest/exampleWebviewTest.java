@@ -53,13 +53,24 @@ public class exampleWebviewTest {
 
 	@Test
 	public void loginSuccessfulTest() throws InterruptedException{
+		new UtilsFunctions().waitSeconds(2);
 		Set<String> contextNames = driver.getContextHandles();
 		driver.context((String) contextNames.toArray()[1]); // set context to WEBVIEW
 
-		// Find and click the login with email button
-		WebElement emailButton = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/page-login/*/button[*/ion-icon[@name='mail']]")));
-		emailButton.click();
+		// Check the choose to login with layout
+		WebElement loginWith = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/ion-footer/button")));
+		WebElement loginWithMail = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/page-login/*/button[*/ion-icon[@name='mail']]")));
+		WebElement loginWithGoogle = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/page-login/*/button[*/ion-icon[contains(@name,'google')]]")));
+		WebElement loginWithFacebook = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/page-login/*/button[*/ion-icon[contains(@name,'facebook')]]")));
+		WebElement loginWithEmail = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/page-login/*/button[*/ion-icon[contains(@name,'twitter')]]")));
 
+		assertTrue("There are missing items in the login page", loginWith.isDisplayed() && loginWithMail.isDisplayed() 
+				&& loginWithGoogle.isDisplayed() && loginWithFacebook.isDisplayed() && loginWithEmail.isDisplayed() 
+				&& driver.findElements(By.xpath("//*/ion-footer/button")).size() == 4);
+
+		// Click the login with email button
+		loginWithMail.click();
+		
 		// Find and write the username in the email field
 		WebElement emailText = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/input[@type='email']")));
 		emailText.sendKeys(EDUPILLS_USER);
@@ -72,14 +83,45 @@ public class exampleWebviewTest {
 		WebElement submitLogin = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/button[@type='submit']")));
 		submitLogin.click();
 
-		// Wait for the profile picture to be clickable so we know the application is loaded
-		new WebDriverWait(driver, 30).until(ExpectedConditions.elementToBeClickable(By.xpath("//*/button[*/ion-icon[@name='contact']]")));
+		// Wait for the loading alert to disappear so we know the application is loaded
+		new UtilsFunctions().waitSeconds(2);
+		new WebDriverWait(driver, 30).until(ExpectedConditions.invisibilityOfElementLocated((By.xpath("//*/div[@class='loading-spinner']"))));
+		WebElement searchMagnifier = new WebDriverWait(driver, 30).until(ExpectedConditions.elementToBeClickable(By.xpath("//*/button[*/ion-icon[@name='search']]")));
+		WebElement profilePicture = new WebDriverWait(driver, 30).until(ExpectedConditions.elementToBeClickable(By.xpath("//*/button[*/ion-icon[@name='contact']]")));
 
 		// Check the logo is shown
 		WebElement logoEdupills = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/img[@alt='Logo EduPills']")));
-		assertTrue("The logo hasn't shown, login unsuccessful", logoEdupills.isDisplayed());
+		WebElement menuList = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/div[@class='dashboard-menu-container']//ion-list/button")));
+		WebElement aboutIcon = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/div[@class='about-icon-container']")));
+		
+		assertTrue("There are missing items in the main page", searchMagnifier.isDisplayed() && profilePicture.isDisplayed() 
+				&& logoEdupills.isDisplayed() && aboutIcon.isDisplayed() && menuList.isDisplayed() 
+				&& driver.findElements(By.xpath("//*/div[@class='dashboard-menu-container']//ion-list/button")).size() == 5);
 
-		// Wait so we can see the result on screen
-		new UtilsFunctions().waitSeconds(2);
+		// Click on the profile picture 
+		profilePicture.click();
+		
+		// Check the layout
+		WebElement profileImageContainer = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/div[@class='profile-container' and div[@class='image-container']]")));
+		WebElement usernameInProfile = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/span[@class='username']")));
+		WebElement usermailInProfile = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/span[@class='usermail']")));
+		WebElement userLevel = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/span[@class='level']")));
+		WebElement userInsigniaMail = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/span[@class='insignia']")));
+		WebElement userPillCount = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/span[@class='coursescount']")));
+		WebElement userPillLabel = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/span[@class='courseslabel']")));
+		WebElement userPillCategories = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/div[@class='category']")));
+		
+		assertTrue("There are missing items in the profile page", profileImageContainer.isDisplayed() && usernameInProfile.isDisplayed() 
+				&& usermailInProfile.isDisplayed() && userLevel.isDisplayed() && userInsigniaMail.isDisplayed() && userPillCount.isDisplayed()
+				&& userPillLabel.isDisplayed() && userPillCategories.isDisplayed());
+		
+		// Logout
+		WebElement logoutButton = new WebDriverWait(driver, 30).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/ion-footer/button[span[@class='button-inner']]")));
+		logoutButton.click();
+		WebElement alertDialogLogout = new WebDriverWait(driver, 30).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/ion-alert//*/button[2]")));
+		alertDialogLogout.click();
+		logoEdupills = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/img[@alt='Logo EduPills']")));
+		
+		assertTrue("Logout unsuccessful", logoEdupills.isDisplayed());
 	}
 }

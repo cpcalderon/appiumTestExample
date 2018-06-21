@@ -5,7 +5,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -50,19 +49,22 @@ public class exampleWebAppTest {
 		// Navigate to https://google.es
 		driver.get("https://google.es");
 
-		// Wait until the search box is present and find it
-		new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.name("q")));
-		WebElement textBox = driver.findElementByName("q");
+		// Wait until the search box and search button are present and find them
+		WebElement searchButton = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.className("Tg7LZd")));
+		WebElement textBox = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.name("q")));
 
-		// Send the desired text and press enter
+		// Send the desired text and click search
 		textBox.sendKeys(TEXT_TO_SEARCH);
-		textBox.sendKeys(Keys.ENTER);
+		searchButton.click();
 
-		// Wait for the new page to load by waiting for the search box, finding it again
-		new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.name("q")));
-		textBox = driver.findElementByName("q");
+		WebElement searchTypeHeader = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//*/div[@id='hdtb-msb']"))));
+		
+		// Wait for the new page to load
+		new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.name("q")));
+		textBox = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.name("q")));
 
-		// Check actual text is the same as the one searched.
-		assertTrue("Text is correct", textBox.getAttribute("value").equals(TEXT_TO_SEARCH));
+		// Check new page is correctly displayed
+		assertTrue("New page has been loaded correctly", textBox.getAttribute("value").equals(TEXT_TO_SEARCH) && searchTypeHeader.isDisplayed() 
+				&& driver.findElementsByXPath("//*/div[@id='hdtb-msb']/div").size() > 5);
 	}
 }

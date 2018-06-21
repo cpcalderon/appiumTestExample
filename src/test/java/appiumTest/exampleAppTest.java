@@ -50,28 +50,34 @@ public class exampleAppTest {
 		driver.quit();
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Test
 	public void exampleAppTesting() throws InterruptedException {
 		
 		// Searches element by content-desc and checks if it's correctly pressed
 		MobileElement clickRadioButton2 = (MobileElement) driver.findElementByAccessibilityId("radioButton2");
 		clickRadioButton2.click();
+		
 		assertTrue("Radio Button 2 is not pressed", clickRadioButton2.getAttribute("checked").equals("true"));
 
 		// Searches element by XPath query and checks if it's correctly pressed
 		// MobileElement clickRadioButton1 = (MobileElement) driver.findElementByXPath("//*/android.widget.RadioButton[contains(@resource-id,emergya.es.exampleapp:id/radioButton1)]");
 		MobileElement clickRadioButton1 = (MobileElement) new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/android.widget.RadioButton[contains(@resource-id,emergya.es.exampleapp:id/radioButton1)]")));
 		clickRadioButton1.click();
+		
 		assertTrue("Radio Button 1 is not pressed", clickRadioButton1.getAttribute("checked").equals("true"));
 
 		// Searches element by ID, waits 5 seconds before giving up and checks if it's correctly pressed
 		MobileElement textInput = (MobileElement) (new WebDriverWait(driver, 5)).until(ExpectedConditions.presenceOfElementLocated((By.id("emergya.es.exampleapp:id/textInput"))));
 		textInput.sendKeys(TEXT_TO_SEARCH);
+		
 		assertTrue("Text hasn't been written", textInput.getText().equals(TEXT_TO_SEARCH));
 
 		// Checks that the seek bar is present
 		MobileElement seekBar = (MobileElement) (new WebDriverWait(driver, 5)).until(ExpectedConditions.presenceOfElementLocated((By.id("emergya.es.exampleapp:id/seekBar"))));
+		
 		assertTrue("Seek bar isn't shown", seekBar.isDisplayed());
+		
 		// Click and drag to position, waits inbetween so we can see it does something
 		new TouchAction(driver).press(PointOption.point(70, 1530)).moveTo(PointOption.point(800, 1530)).release().perform();
 		new UtilsFunctions().waitSeconds(2);
@@ -79,6 +85,7 @@ public class exampleAppTest {
 		new UtilsFunctions().waitSeconds(2);
 		// Click on a position and check the action has been done
 		new TouchAction(driver).press(PointOption.point(40,700)).release().perform();
+		
 		assertTrue("Radio Button 2 is not pressed", clickRadioButton2.getAttribute("checked").equals("true"));
 
 	}
