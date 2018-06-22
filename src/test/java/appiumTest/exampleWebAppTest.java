@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.apache.log4j.Level;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -15,6 +16,7 @@ import org.testng.annotations.Test;
 
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.MobileCapabilityType;
+import utils.MyLogger;
 
 public class exampleWebAppTest {
 	AndroidDriver<WebElement> driver;
@@ -23,6 +25,8 @@ public class exampleWebAppTest {
 
 	@BeforeClass
 	public void beforeMethod() throws MalformedURLException{
+		MyLogger.log.setLevel(Level.INFO);
+		MyLogger.log.info("Starting before method");
 
 		DesiredCapabilities capabilities = new DesiredCapabilities();
 
@@ -41,22 +45,28 @@ public class exampleWebAppTest {
 
 	@AfterClass
 	public void afterMethod() {
+		MyLogger.log.info("Starting after method");
 		driver.quit();
 	}
 
 	@Test
 	public void exampleWebAppTesting() throws InterruptedException{
 		// Navigate to https://google.es
+        MyLogger.log.info("Navigating to Google main page");
 		driver.get("https://google.es");
 
 		// Wait until the search box and search button are present and find them
+        MyLogger.log.info("Waiting for the search button and text box");
 		WebElement searchButton = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.className("Tg7LZd")));
 		WebElement textBox = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.name("q")));
 
 		// Send the desired text and click search
+        MyLogger.log.info("Sending text");
 		textBox.sendKeys(TEXT_TO_SEARCH);
+        MyLogger.log.info("Clicking search");
 		searchButton.click();
 
+        MyLogger.log.info("Searching types header");
 		WebElement searchTypeHeader = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//*/div[@id='hdtb-msb']"))));
 		
 		// Wait for the new page to load
@@ -64,7 +74,10 @@ public class exampleWebAppTest {
 		textBox = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.name("q")));
 
 		// Check new page is correctly displayed
+        MyLogger.log.info("Checking new page");
 		assertTrue("New page has been loaded correctly", textBox.getAttribute("value").equals(TEXT_TO_SEARCH) && searchTypeHeader.isDisplayed() 
 				&& driver.findElementsByXPath("//*/div[@id='hdtb-msb']/div").size() > 5);
+
+        MyLogger.log.info("Test successful");
 	}
 }

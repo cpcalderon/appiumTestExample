@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Set;
 
+import org.apache.log4j.Level;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -15,6 +16,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import io.appium.java_client.android.AndroidDriver;
+import utils.MyLogger;
 import utils.UtilsFunctions;
 
 public class exampleWebviewTest {
@@ -24,7 +26,8 @@ public class exampleWebviewTest {
 
 	@BeforeClass
 	public void beforeMethod() throws MalformedURLException{
-
+		MyLogger.log.setLevel(Level.INFO);
+		MyLogger.log.info("Starting before method");
 		DesiredCapabilities capabilities = new DesiredCapabilities();
 
 		// Device name (can be random, but required)
@@ -48,16 +51,20 @@ public class exampleWebviewTest {
 
 	@AfterClass
 	public void afterMethod() {
+		MyLogger.log.info("Starting after method");
 		driver.quit();
 	}
 
 	@Test
 	public void loginSuccessfulTest() throws InterruptedException{
+
 		new UtilsFunctions().waitSeconds(2);
+        MyLogger.log.info("Changing context to WebView");
 		Set<String> contextNames = driver.getContextHandles();
 		driver.context((String) contextNames.toArray()[1]); // set context to WEBVIEW
 
 		// Check the choose to login with layout
+        MyLogger.log.info("Checking layour of the login page");
 		WebElement loginWith = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/ion-footer/button")));
 		WebElement loginWithMail = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/page-login/*/button[*/ion-icon[@name='mail']]")));
 		WebElement loginWithGoogle = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/page-login/*/button[*/ion-icon[contains(@name,'google')]]")));
@@ -69,27 +76,34 @@ public class exampleWebviewTest {
 				&& driver.findElements(By.xpath("//*/ion-footer/button")).size() == 4);
 
 		// Click the login with email button
+        MyLogger.log.info("Clicking login with email button");
 		loginWithMail.click();
 		
 		// Find and write the username in the email field
+        MyLogger.log.info("Writing email");
 		WebElement emailText = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/input[@type='email']")));
 		emailText.sendKeys(EDUPILLS_USER);
 
 		// Find and write the password in the password field
+        MyLogger.log.info("Writing password");
 		WebElement passwordText = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/input[@type='password']")));
 		passwordText.sendKeys(EDUPILLS_PASS);
 
 		// Click on the login button
+        MyLogger.log.info("Clicking login button");
 		WebElement submitLogin = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/button[@type='submit']")));
 		submitLogin.click();
 
 		// Wait for the loading alert to disappear so we know the application is loaded
-		new UtilsFunctions().waitSeconds(2);
-		new WebDriverWait(driver, 30).until(ExpectedConditions.invisibilityOfElementLocated((By.xpath("//*/div[@class='loading-spinner']"))));
+        MyLogger.log.info("Waiting for the new page to load");
+        new WebDriverWait(driver, 30).until(ExpectedConditions.visibilityOfElementLocated((By.xpath("//*/div[@class='loading-spinner']"))));
+        new WebDriverWait(driver, 30).until(ExpectedConditions.invisibilityOfElementLocated((By.xpath("//*/div[@class='loading-spinner']"))));
+        new WebDriverWait(driver, 30).until(ExpectedConditions.invisibilityOfElementLocated((By.xpath("//*/div[@class='loading-content']"))));
 		WebElement searchMagnifier = new WebDriverWait(driver, 30).until(ExpectedConditions.elementToBeClickable(By.xpath("//*/button[*/ion-icon[@name='search']]")));
 		WebElement profilePicture = new WebDriverWait(driver, 30).until(ExpectedConditions.elementToBeClickable(By.xpath("//*/button[*/ion-icon[@name='contact']]")));
 
-		// Check the logo is shown
+		// Check the layout is correct
+        MyLogger.log.info("Checking main page layout");
 		WebElement logoEdupills = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/img[@alt='Logo EduPills']")));
 		WebElement menuList = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/div[@class='dashboard-menu-container']//ion-list/button")));
 		WebElement aboutIcon = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/div[@class='about-icon-container']")));
@@ -98,10 +112,12 @@ public class exampleWebviewTest {
 				&& logoEdupills.isDisplayed() && aboutIcon.isDisplayed() && menuList.isDisplayed() 
 				&& driver.findElements(By.xpath("//*/div[@class='dashboard-menu-container']//ion-list/button")).size() == 5);
 
-		// Click on the profile picture 
+		// Click on the profile picture
+        MyLogger.log.info("Clicking the profile picture");
 		profilePicture.click();
 		
 		// Check the layout
+        MyLogger.log.info("Checking the profile page layout");
 		WebElement profileImageContainer = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/div[@class='profile-container' and div[@class='image-container']]")));
 		WebElement usernameInProfile = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/span[@class='username']")));
 		WebElement usermailInProfile = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/span[@class='usermail']")));
@@ -116,6 +132,7 @@ public class exampleWebviewTest {
 				&& userPillLabel.isDisplayed() && userPillCategories.isDisplayed());
 		
 		// Logout
+        MyLogger.log.info("Performing log out");
 		WebElement logoutButton = new WebDriverWait(driver, 30).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/ion-footer/button[span[@class='button-inner']]")));
 		logoutButton.click();
 		WebElement alertDialogLogout = new WebDriverWait(driver, 30).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/ion-alert//*/button[2]")));
@@ -123,5 +140,7 @@ public class exampleWebviewTest {
 		logoEdupills = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*/img[@alt='Logo EduPills']")));
 		
 		assertTrue("Logout unsuccessful", logoEdupills.isDisplayed());
+
+        MyLogger.log.info("Test successful");
 	}
 }
