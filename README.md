@@ -8,4 +8,4 @@ Just clone this repository and you will be able to launch different tests for di
 
 # Requirements
 
-The tests require an Appium server at 0.0.0.0:4723.
+The tests require an Appium server at 0.0.0.0:4723 and a device / emulator running Android.
