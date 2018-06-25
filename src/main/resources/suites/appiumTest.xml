@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
-<suite name="Appium Test" enabled="true" configfailurepolicy="continue">
+<suite name="Appium Test" configfailurepolicy="continue">
 
-	<test name="Example App Test" order-by-instances="true">
+	<test name="Example App Test">
 		<classes>
 			<class name="appiumTest.exampleAppTest">
 				<methods>
@@ -12,7 +13,7 @@
 		</classes>
 	</test>
 
-	<test name="Example Webapp Test" order-by-instances="true">
+	<test name="Example Webapp Test">
 		<classes>
 			<class name="appiumTest.exampleWebAppTest">
 				<methods>
@@ -22,7 +23,7 @@
 		</classes>
 	</test>
 
-	<test name="Example WebView Test" order-by-instances="true">
+	<test name="Example WebView Test">
 		<classes>
 			<class name="appiumTest.exampleWebviewTest">
 				<methods>

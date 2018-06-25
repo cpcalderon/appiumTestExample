@@ -1,9 +1,7 @@
 package appiumTest;
-import static org.junit.Assert.assertTrue;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.remote.MobileCapabilityType;
 import org.apache.log4j.Level;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -13,71 +11,79 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.remote.MobileCapabilityType;
 import utils.MyLogger;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import static org.junit.Assert.assertTrue;
+
 public class exampleWebAppTest {
-	AndroidDriver<WebElement> driver;
-	String USER_DIR = System.getProperty("user.dir");
-	String TEXT_TO_SEARCH = "Appium webapp test";
+    AppiumDriver<WebElement> driver;
+    String USER_DIR = System.getProperty("user.dir");
+    String TEXT_TO_SEARCH = "Appium webapp test";
 
-	@BeforeClass
-	public void beforeMethod() throws MalformedURLException{
-		MyLogger.log.setLevel(Level.INFO);
-		MyLogger.log.info("Starting before method");
+    @BeforeClass
+    public void beforeMethod() throws MalformedURLException {
+        MyLogger.log.setLevel(Level.INFO);
+        MyLogger.log.info("Starting before method");
 
-		DesiredCapabilities capabilities = new DesiredCapabilities();
+        DesiredCapabilities capabilities = new DesiredCapabilities();
 
-		// Device name (can be random, but required)
-		capabilities.setCapability("deviceName", "testDevice");
+        // Device name (can be random, but required)
+        capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, "testDevice");
 
-		// Browser to run
-		capabilities.setCapability(MobileCapabilityType.BROWSER_NAME, "chrome");
+        // Platform, Android or iOS
+        capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, "android");
 
-		// Keep software keyboard closed to prevent intercepting taps on the screen
-		capabilities.setCapability("unicodeKeyboard", true);
-		capabilities.setCapability("resetKeyboard", true);
+        // Browser to run
+        capabilities.setCapability(MobileCapabilityType.BROWSER_NAME, "chrome");
 
-		driver = new AndroidDriver<WebElement>(new URL("http://0.0.0.0:4723/wd/hub"), capabilities);
-	}
+        // Keep software keyboard closed to prevent intercepting taps on the screen
+        capabilities.setCapability("unicodeKeyboard", true);
+        capabilities.setCapability("resetKeyboard", true);
 
-	@AfterClass
-	public void afterMethod() {
-		MyLogger.log.info("Starting after method");
-		driver.quit();
-	}
+        driver = new AppiumDriver<WebElement>(new URL("http://0.0.0.0:4723/wd/hub"), capabilities);
+    }
 
-	@Test
-	public void exampleWebAppTesting() throws InterruptedException{
-		// Navigate to https://google.es
+    @AfterClass
+    public void afterMethod() {
+        MyLogger.log.info("Starting after method");
+        driver.quit();
+    }
+
+    @Test
+    public void exampleWebAppTesting() throws InterruptedException {
+
+        MyLogger.log.info("Test started");
+
+        // Navigate to https://google.es
         MyLogger.log.info("Navigating to Google main page");
-		driver.get("https://google.es");
+        driver.get("https://google.es");
 
-		// Wait until the search box and search button are present and find them
+        // Wait until the search box and search button are present and find them
         MyLogger.log.info("Waiting for the search button and text box");
-		WebElement searchButton = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.className("Tg7LZd")));
-		WebElement textBox = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.name("q")));
+        WebElement searchButton = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.className("Tg7LZd")));
+        WebElement textBox = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.name("q")));
 
-		// Send the desired text and click search
+        // Send the desired text and click search
         MyLogger.log.info("Sending text");
-		textBox.sendKeys(TEXT_TO_SEARCH);
+        textBox.sendKeys(TEXT_TO_SEARCH);
         MyLogger.log.info("Clicking search");
-		searchButton.click();
+        searchButton.click();
 
         MyLogger.log.info("Searching types header");
-		WebElement searchTypeHeader = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//*/div[@id='hdtb-msb']"))));
-		
-		// Wait for the new page to load
-		new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.name("q")));
-		textBox = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.name("q")));
+        WebElement searchTypeHeader = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//*/div[@id='hdtb-msb']"))));
 
-		// Check new page is correctly displayed
+        // Wait for the new page to load
+        new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.name("q")));
+        textBox = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfElementLocated(By.name("q")));
+
+        // Check new page is correctly displayed
         MyLogger.log.info("Checking new page");
-		assertTrue("New page has been loaded correctly", textBox.getAttribute("value").equals(TEXT_TO_SEARCH) && searchTypeHeader.isDisplayed() 
-				&& driver.findElementsByXPath("//*/div[@id='hdtb-msb']/div").size() > 5);
+        assertTrue("New page has been loaded correctly", textBox.getAttribute("value").equals(TEXT_TO_SEARCH) && searchTypeHeader.isDisplayed()
+                && driver.findElementsByXPath("//*/div[@id='hdtb-msb']/div").size() > 5);
 
         MyLogger.log.info("Test successful");
-	}
+    }
 }
