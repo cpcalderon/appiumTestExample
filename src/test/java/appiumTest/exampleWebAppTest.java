@@ -2,7 +2,6 @@ package appiumTest;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.remote.MobileCapabilityType;
-import org.apache.log4j.Level;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -11,7 +10,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import utils.Constants;
 import utils.MyLogger;
+import utils.UtilsFunctions;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -19,31 +20,30 @@ import java.net.URL;
 import static org.junit.Assert.assertTrue;
 
 public class exampleWebAppTest {
-    AppiumDriver<WebElement> driver;
-    String USER_DIR = System.getProperty("user.dir");
-    String TEXT_TO_SEARCH = "Appium webapp test";
+    private AppiumDriver<WebElement> driver;
+    private final String PLATFORM_NAME = UtilsFunctions.propertiesLoader(Constants.USER_DIR+"/target/classes/test.properties").get("OS");
+    private final String APPIUM_SERVER_URL = UtilsFunctions.propertiesLoader(Constants.USER_DIR+"/target/classes/test.properties").get("appiumServerURL");
 
     @BeforeClass
     public void beforeMethod() throws MalformedURLException {
-        MyLogger.log.setLevel(Level.INFO);
+        UtilsFunctions.setLoggerLevel("INFO");
         MyLogger.log.info("Starting before method");
-
         DesiredCapabilities capabilities = new DesiredCapabilities();
 
         // Device name (can be random, but required)
         capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, "testDevice");
 
         // Platform, Android or iOS
-        capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, "android");
-
-        // Browser to run
-        capabilities.setCapability(MobileCapabilityType.BROWSER_NAME, "chrome");
+        capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, PLATFORM_NAME);
 
         // Keep software keyboard closed to prevent intercepting taps on the screen
         capabilities.setCapability("unicodeKeyboard", true);
         capabilities.setCapability("resetKeyboard", true);
 
-        driver = new AppiumDriver<WebElement>(new URL("http://0.0.0.0:4723/wd/hub"), capabilities);
+        // Browser to run
+        capabilities.setCapability(MobileCapabilityType.BROWSER_NAME, "chrome");
+
+        driver = new AppiumDriver<>(new URL(APPIUM_SERVER_URL), capabilities);
     }
 
     @AfterClass
@@ -53,7 +53,7 @@ public class exampleWebAppTest {
     }
 
     @Test
-    public void exampleWebAppTesting() throws InterruptedException {
+    public void exampleWebAppTesting() {
 
         MyLogger.log.info("Test started");
 
@@ -68,7 +68,7 @@ public class exampleWebAppTest {
 
         // Send the desired text and click search
         MyLogger.log.info("Sending text");
-        textBox.sendKeys(TEXT_TO_SEARCH);
+        textBox.sendKeys(Constants.TEXT_TO_SEARCH);
         MyLogger.log.info("Clicking search");
         searchButton.click();
 
@@ -81,7 +81,7 @@ public class exampleWebAppTest {
 
         // Check new page is correctly displayed
         MyLogger.log.info("Checking new page");
-        assertTrue("New page has been loaded correctly", textBox.getAttribute("value").equals(TEXT_TO_SEARCH) && searchTypeHeader.isDisplayed()
+        assertTrue("New page has been loaded correctly", textBox.getAttribute("value").equals(Constants.TEXT_TO_SEARCH) && searchTypeHeader.isDisplayed()
                 && driver.findElementsByXPath("//*/div[@id='hdtb-msb']/div").size() > 5);
 
         MyLogger.log.info("Test successful");
