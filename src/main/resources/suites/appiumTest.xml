@@ -25,9 +25,9 @@
 
 	<test name="Example WebView Test">
 		<classes>
-			<class name="appiumTest.exampleWebviewTest">
+			<class name="appiumTest.exampleWebViewTest2">
 				<methods>
-					<include name="loginSuccessfulTest" />
+					<include name="cordovaTest" />
 				</methods>
 			</class>
 		</classes>

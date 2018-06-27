@@ -40,7 +40,7 @@ public class exampleWebviewTest {
         capabilities.setCapability("unicodeKeyboard", true);
         capabilities.setCapability("resetKeyboard", true);
 
-        // Application package and activity to run, install the next app to continue
+        // Application package and activity to run, install the next app to continue, preferably in the preproduction environment
         // https://play.google.com/store/apps/details?id=es.educalab.edupills&hl=es_419
         capabilities.setCapability("appPackage", "es.educalab.edupills");
         capabilities.setCapability("appActivity", ".MainActivity");
@@ -57,6 +57,8 @@ public class exampleWebviewTest {
 
     @Test
     public void loginSuccessfulTest() throws InterruptedException {
+
+        MyLogger.log.info("This test might fail if used in the production app, as WebView context is not shown. It does work in preproduction and staging environment application");
 
         MyLogger.log.info("Test started");
 
